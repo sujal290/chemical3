@@ -207,7 +207,7 @@ $pagination_start = max(1, $pagination_end - $pagination_range + 1);
         }
 
         .modal-content {
-            background-color:skyblue;
+            background-color:#B0C4DE;
             margin-top: 25px;
             margin-left:auto;
             margin-right:auto;
