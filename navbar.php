@@ -6,9 +6,8 @@
   <title>navbar</title>
     <style>
     .header {
-        /* background-color: #064164; */
-        background: linear-gradient(to bottom, #0C7EC2, #085B8E);
-        color: white;
+        background: linear-gradient(to bottom, #0C7EC2, #085B8E);/* Adjusted to light yellow gradient */
+        color: #fff; /* Darker text color for better readability */
         padding: 15px 20px;
         display: flex;
         align-items: center;
@@ -16,7 +15,7 @@
         flex-wrap: wrap; /* Allows items to wrap to the next line */
     }
     .header h1 {
-        color: white;
+        color: #fff; /* Darker text color */
         font-size: 1.5rem; /* Responsive font size */
         text-align: center; /* Center the text */
         margin: -10px; /* Margin for spacing */
@@ -24,7 +23,7 @@
     }
     .header img {
         height: 60px;
-        width:60px;
+        width: 60px;
         flex: 0 0 auto; /* Prevents shrinking */
         margin: 5px; /* Margin for spacing */
     }

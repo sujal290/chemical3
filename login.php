@@ -1,67 +1,9 @@
-<?php
-session_start();
-
-$error_message = '';
-
-if (isset($_POST['login'])) {
-    $username = $_POST['username'] ?? '';
-    $password = $_POST['password'] ?? '';
-
-    // Database connection
-    $conn = new mysqli("localhost", "root", "", "cim_system2");
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    // Prepare the SQL query with JOIN to fetch fullname from id_group
-    $query = "SELECT e.id, e.password, e.desig_id, e.group_id, e.first_name, e.middle_name, e.last_name, e.is_created, d.desig_fullname, g.fullname AS group_fullname
-              FROM id_emp e
-              INNER JOIN id_desig d ON e.desig_id = d.id
-              INNER JOIN id_group g ON e.group_id = g.group_id
-              WHERE e.username = '$username' AND e.user_type = 'Employee'";
-    
-    $result = $conn->query($query);
-
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-
-        // Verify the password
-        if ($password === $row['password']) {
-            // Store session data
-            $_SESSION['username'] = $username;
-            $_SESSION['user_id'] = $row['id'];
-            $_SESSION['desig_id'] = $row['desig_id'];
-            $_SESSION['group_id'] = $row['group_id'];
-            $_SESSION['first_name'] = $row['first_name'];
-            $_SESSION['middle_name'] = $row['middle_name'];
-            $_SESSION['last_name'] = $row['last_name'];
-            $_SESSION['is_created'] = $row['is_created'];
-            $_SESSION['desig_fullname'] = $row['desig_fullname'];
-            $_SESSION['group_fullname'] = $row['group_fullname'];
-
-            // Redirect to dashboard
-            header('Location: dashboard.php');
-            exit;
-        } else {
-            $error_message = "Incorrect password.";
-        }
-    } else {
-        $error_message = "User not found or incorrect user type.";
-    }
-
-    $conn->close();
-}
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Login - ISO Portal</title>
     <style>
         /* General styles */
         body {
@@ -70,10 +12,7 @@ if (isset($_POST['login'])) {
             flex-direction: column;
             height: 100vh;
             margin: 0;
-            background-image: url('./images/background.webp');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center center;
+            background-color: #f0f0f0; /* Changed background color to light grey */
             color: #333;
         }
 
@@ -85,11 +24,22 @@ if (isset($_POST['login'])) {
             align-items: center;
             padding: 50px;
             box-sizing: border-box;
+            background: linear-gradient(135deg, #ffd700, #ffd700); /* Gradient background */
+            background: hsla(217, 100%, 50%, 1);
+
+background: linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+
+background: -moz-linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+
+background: -webkit-linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%);
+
+filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#0061FF", endColorstr="#60EFFF", GradientType=1 );
         }
 
         .login-container {
             display: flex;
-            background-color: rgba(255, 255, 255, 0.95); /* Semi-transparent white background */
+            /* background-color: #fdf9e1; Light yellow background */
+    background-color: rgba(255, 255, 255, 0.95);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -124,7 +74,7 @@ if (isset($_POST['login'])) {
             margin-bottom: 20px;
             font-size: 28px;
             text-align: center;
-            color: #0C7EC2;
+            color: #6b705c; /* Darker yellow for text */
         }
 
         .image-container img {
@@ -159,12 +109,13 @@ if (isset($_POST['login'])) {
             border-radius: 6px;
             font-size: 16px;
             margin-top: -5px;
+            box-shadow: 0 0 10px rgba(219, 211, 176, 0.5); /* Soft shadow */
         }
 
         .form-group input[type="text"]:focus,
         .form-group input[type="password"]:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+            border-color: #ffd700; /* Brighter yellow on focus */
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8); /* More pronounced focus shadow */
             outline: none;
         }
 
@@ -174,17 +125,18 @@ if (isset($_POST['login'])) {
             padding: 14px;
             border: none;
             border-radius: 6px;
-            background-color: #007bff;
+            background-color: #007bff; /* blue button */
             color: #fff;
             font-size: 16px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             margin-left: 8px;
             margin-top: 10px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Subtle button shadow */
         }
 
         .btn:hover {
-            background-color: #0056b3;
+            background-color: #0056b3; /* Darker yellow on hover */
         }
 
         .register-link {
@@ -194,7 +146,7 @@ if (isset($_POST['login'])) {
         }
 
         .register-link a {
-            color: #007bff;
+            color: #ffd700; /* Light yellow link color */
             text-decoration: none;
         }
 
@@ -203,11 +155,12 @@ if (isset($_POST['login'])) {
         }
 
         footer {
-            background: linear-gradient(to bottom, #0C7EC2, #085B8E);
-            color: white;
+        background: linear-gradient(to bottom, #0C7EC2, #085B8E);   /* Adjusted to light yellow gradient */
+            color: #fff;
             text-align: center;
             padding: 10px 0;
             margin-top: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         @media (max-width: 768px) {
@@ -258,8 +211,8 @@ if (isset($_POST['login'])) {
         <div class="login-container">
             <div class="image-fix">
                 <div class="image-container">
-                    <h1>CHEMICAL INVENTORY MANAGEMENT SYSTEM</h1>
-                    <img src="./images/loginimg.png" alt="Image">
+                    <h1>ISO Portal</h1>
+                    <img src="./images/iso.png" alt="Image">
                 </div>
             </div>
             <div class="login-box">
@@ -282,11 +235,6 @@ if (isset($_POST['login'])) {
         <p>Designed and maintained by <br>QRS&IT group</p>
     </footer>
 
-    <?php if ($error_message): ?>
-    <script>
-        alert("<?php echo $error_message; ?>");
-    </script>
-    <?php endif; ?>
 
 </body>
 </html>
